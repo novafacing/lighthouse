@@ -13,6 +13,10 @@ from ..misc import is_mainthread, not_mainthread
 import binaryninja
 from binaryninja import PythonScriptingInstance, binaryview
 from binaryninja.plugin import BackgroundTaskThread
+from binaryninjaui import Sidebar, SidebarWidget, UIActionHandler
+from PySide6 import QtCore
+from PySide6.QtCore import Qt, QRectF
+from PySide6.QtGui import QImage, QPixmap, QFont, QColor
 
 logger = logging.getLogger("Lighthouse.API.Binja")
 
@@ -356,32 +360,31 @@ class RenameHooks(binaryview.BinaryDataNotification):
 # UI
 #------------------------------------------------------------------------------
 
-if QT_AVAILABLE:
-    class LighthouseWidget(SidebarWidget):
-        def __init__(self, name, frame, data):
-            SidebarWidget.__init__(self, name)
-            self.actionHandler = UIActionHandler()
-            self.actionHandler.setupActionHandler(self)
+class LighthouseWidget(SidebarWidget):
+    def __init__(self, name, frame, data):
+        SidebarWidget.__init__(self, name)
+        self.actionHandler = UIActionHandler()
+        self.actionHandler.setupActionHandler(self)
 
-    class LighthouseWidgetType(SidebarWidgetType):
-        def __init__(self):
-            icon = QImage(56, 56, QImage.Format_RGB32)
-            icon.fill(0)
+class LighthouseWidgetType(SidebarWidgetType):
+    def __init__(self):
+        icon = QImage(56, 56, QImage.Format_RGB32)
+        icon.fill(0)
 
-            p = QPainter()
-            p.begin(icon)
-            p.setFont(QFont("Open Sans", 56))
-            p.setPen(QColor(255, 255, 255, 255))
-            p.drawText(QRectF(0, 0, 56, 56), Qt.AlignCenter, "L")
-            p.end()
+        p = QPainter()
+        p.begin(icon)
+        p.setFont(QFont("Open Sans", 56))
+        p.setPen(QColor(255, 255, 255, 255))
+        p.drawText(QRectF(0, 0, 56, 56), Qt.AlignCenter, "L")
+        p.end()
 
-            SidebarWidgetType.__init__(self, icon, "Lighthouse")
+        SidebarWidgetType.__init__(self, icon, "Lighthouse")
 
-        def createWidget(self, frame, data):
-            return Widget("Lighthouse", frame, data)
+    def createWidget(self, frame, data):
+        return Widget("Lighthouse", frame, data)
 
-        def defaultLocation(self):
-            return SidebarWidgetLocation.RightContent
+    def defaultLocation(self):
+        return SidebarWidgetLocation.RightContent
 
-        def contextSensitivity(self):
-            return SidebarContextSensitivity.SelfManagedSidebarContext
+    def contextSensitivity(self):
+        return SidebarContextSensitivity.SelfManagedSidebarContext
