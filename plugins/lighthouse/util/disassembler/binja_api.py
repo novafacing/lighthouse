@@ -13,7 +13,7 @@ from ..misc import is_mainthread, not_mainthread
 import binaryninja
 from binaryninja import PythonScriptingInstance, binaryview
 from binaryninja.plugin import BackgroundTaskThread
-from binaryninjaui import Sidebar, SidebarWidget, UIActionHandler
+from binaryninjaui import Sidebar, SidebarWidget, SidebarWidgetType, UIActionHandler
 from PySide6 import QtCore
 from PySide6.QtCore import Qt, QRectF
 from PySide6.QtGui import QImage, QPixmap, QFont, QColor
